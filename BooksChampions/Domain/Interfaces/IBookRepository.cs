@@ -12,5 +12,7 @@ namespace Domain.Interfaces
         public List<Book> GetBooks();
 
         public int AddBook(Book book);
+
+        public void DeleteBook(int id);
     }
 }

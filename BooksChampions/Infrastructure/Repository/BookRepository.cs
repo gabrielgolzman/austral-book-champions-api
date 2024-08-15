@@ -25,5 +25,14 @@ namespace Infrastructure.Repository
 
             return book.Id;
         }
+
+        public void DeleteBook(int id) {
+            var book = _dbContext.Books.FirstOrDefault(x => x.Id == id);
+
+            if (book != null) {
+                _dbContext.Books.Remove(book);
+                _dbContext.SaveChanges();
+            }
+        }
     }
 }

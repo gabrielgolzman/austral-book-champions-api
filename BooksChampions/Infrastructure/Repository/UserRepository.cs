@@ -13,9 +13,9 @@ namespace Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-      public User? GetUser(string email)
+      public User? GetUser(string email, string password)
         {
-            return _dbContext.Users.FirstOrDefault(x => x.Email == email);
+            return _dbContext.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
         }
     }
 }

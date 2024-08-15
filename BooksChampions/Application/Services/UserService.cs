@@ -16,9 +16,9 @@ namespace Application.Services
             _userRepository = userRepository;
         }
 
-        public UserDto? GetUser(string email)
+        public UserDto? GetUser(string email, string password)
         {
-            var user = _userRepository.GetUser(email);
+            var user = _userRepository.GetUser(email, password);
 
             return user == null ? null : new UserDto { Email = user.Email};
         }

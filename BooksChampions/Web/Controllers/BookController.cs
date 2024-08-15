@@ -29,5 +29,12 @@ namespace Web.Controllers
             return Ok(_bookService.AddBook(bookDto));
         }
 
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            _bookService.DeleteBook(id);
+            return Ok();
+        }
+
     }
 }

@@ -26,7 +26,7 @@ namespace Infrastructure.Services
             if (string.IsNullOrEmpty(rq.Email) || string.IsNullOrEmpty(rq.Password))
                 return null;
 
-            var user = _userRepository.GetUser(rq.Email);
+            var user = _userRepository.GetUser(rq.Email, rq.Password);
 
             return user;
 

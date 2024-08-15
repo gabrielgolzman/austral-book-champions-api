@@ -47,6 +47,11 @@ namespace Application.Services
             });
         }
 
+        public void DeleteBook(int id)
+        {
+             _bookRepostory.DeleteBook(id);
+        }
+
      
     }
 }

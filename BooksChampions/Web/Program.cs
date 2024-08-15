@@ -45,13 +45,11 @@ builder.Services.AddSwaggerGen(setupAction =>
 
 });
 
-
 string connectionString = builder.Configuration["ConnectionStrings:BooksDBConnectionString"]!;
 
 // Configure the SQLite connection
 var connection = new SqliteConnection(connectionString);
 connection.Open();
-
 
 
 builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntenticación que tenemos que elegir después en PostMan para pasarle el token
