@@ -24,6 +24,7 @@ namespace Application.Services
                         Rating = book.Rating,
                         PagesAmount = book.PagesAmount,
                         ImageUrl = book.ImageURL,
+                        IsAvailable = book.IsAvailable,
                         Authors = book.Authors.Select(x => new AuthorDto
                         {
                             Id = x.Id,

@@ -11,6 +11,7 @@ namespace Domain.Entities
         public int Rating { get; set; }
         public int PagesAmount { get; set; }
         public string? ImageURL { get; set; }
+        public bool IsAvailable { get; set; }
         public List<Author> Authors { get; set; } = new List<Author>();
     }
 }
