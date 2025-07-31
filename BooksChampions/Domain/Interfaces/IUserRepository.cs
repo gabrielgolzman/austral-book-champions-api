@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IUserRepository
     {
-        public User? GetUser(string email, string password);
+        public Task<User?> GetUser(string email, string password);
     }
 }

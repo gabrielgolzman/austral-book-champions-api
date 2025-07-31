@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
@@ -12,26 +13,26 @@ namespace Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-        public List<Book> GetBooks()
+        public async Task<List<Book>> GetBooks()
         {
-            return _dbContext.Books.ToList();
+            return await _dbContext.Books.ToListAsync();
         }
 
-        public int AddBook(Book book)
+        public async Task<int> AddBook(Book book)
         {
             _dbContext.Books.Add(book);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return book.Id;
         }
 
-        public void DeleteBook(int id) {
-            var book = _dbContext.Books.FirstOrDefault(x => x.Id == id);
+        public async Task DeleteBook(int id) {
+            var book =  await _dbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
 
             if (book != null) {
                 _dbContext.Books.Remove(book);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
     }

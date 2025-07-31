@@ -13,9 +13,9 @@ namespace Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-      public User? GetUser(string email, string password)
+      public async Task<User?> GetUser(string email, string password)
         {
-            return _dbContext.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
+            return await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
         }
     }
 }

@@ -8,7 +8,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text;
 using static Infrastructure.Services.AuthenticationService;
 
@@ -23,11 +22,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setupAction =>
 {
-    setupAction.AddSecurityDefinition("BookChampionsApiBearerAuth", new OpenApiSecurityScheme() //Esto va a permitir usar swagger con el token.
+    setupAction.AddSecurityDefinition("BookChampionsApiBearerAuth", new OpenApiSecurityScheme() 
     {
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
-        Description = "Acá pegar el token generado al loguearse."
+        Description = "Aquí poner el token generado al loguearse."
     });
 
     setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -38,7 +37,7 @@ builder.Services.AddSwaggerGen(setupAction =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "BookChampionsApiBearerAuth" } //Tiene que coincidir con el id seteado arriba en la definición
+                    Id = "BookChampionsApiBearerAuth" }
                 }, new List<string>() }
     });
 
@@ -52,17 +51,17 @@ var connection = new SqliteConnection(connectionString);
 connection.Open();
 
 
-builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntenticación que tenemos que elegir después en PostMan para pasarle el token
-    .AddJwtBearer(options => //Acá definimos la configuración de la autenticación. le decimos qué cosas queremos comprobar. La fecha de expiración se valida por defecto.
+builder.Services.AddAuthentication("Bearer") 
+    .AddJwtBearer(options => 
     {
         options.TokenValidationParameters = new()
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["AuthenticacionService:Issuer"],
-            ValidAudience = builder.Configuration["AuthenticacionService:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthenticacionService:SecretForKey"]))
+            ValidIssuer = builder.Configuration["AuthenticationService:Issuer"],
+            ValidAudience = builder.Configuration["AuthenticationService:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthenticationService:SecretForKey"] ?? ""))
         };
     }
 );
@@ -81,8 +80,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<UserService>();
-builder.Services.Configure<AuthenticacionServiceOptions>(
-   builder.Configuration.GetSection(AuthenticacionServiceOptions.AuthenticacionService));
+builder.Services.Configure<AuthenticationsServiceOptions>(
+   builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
 builder.Services.AddScoped<ICustomAuthenticationService,AuthenticationService>();
 
 #endregion
