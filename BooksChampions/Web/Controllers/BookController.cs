@@ -8,7 +8,6 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class BookController : ControllerBase
     {
         private readonly BookService _bookService;

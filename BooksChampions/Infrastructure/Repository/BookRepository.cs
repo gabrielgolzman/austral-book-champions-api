@@ -15,7 +15,9 @@ namespace Infrastructure.Repository
 
         public async Task<List<Book>> GetBooks()
         {
-            return await _dbContext.Books.ToListAsync();
+            return await _dbContext.Books
+                .Include(x => x.Authors)
+                .ToListAsync();
         }
 
         public async Task<int> AddBook(Book book)

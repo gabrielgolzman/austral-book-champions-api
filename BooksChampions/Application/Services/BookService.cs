@@ -11,30 +11,34 @@ namespace Application.Services
             _bookRepository = bookRepository;
         }
 
-        public List<BookDto> GetBooks() {
+        public async Task<List<BookDto>> GetBooks() {
             
-            var books =  _bookRepository.GetBooks();
+            var books =  await _bookRepository.GetBooks();
 
             return books
                 .Select(book => new BookDto
                     {
                         Id = book.Id,
                         Title = book.Title,
-                        Author = book.Author,
                         Summary = book.Summary,
                         Rating = book.Rating,
                         PagesAmount = book.PagesAmount,
-                        ImageUrl = book.ImageURL
+                        ImageUrl = book.ImageURL,
+                        Authors = book.Authors.Select(x => new AuthorDto
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                        })
+                        .ToList()
                     })
                 .ToList();
         }
 
-        public int AddBook(BookDto bookDto)
+        public Task<int> AddBook(BookDto bookDto)
         {
             return _bookRepository.AddBook(new Book
             {
                 Title = bookDto.Title,
-                Author = bookDto.Author,
                 Summary = bookDto.Summary,
                 Rating = bookDto.Rating,
                 PagesAmount = bookDto.PagesAmount,
