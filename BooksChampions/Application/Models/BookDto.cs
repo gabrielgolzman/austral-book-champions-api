@@ -9,6 +9,7 @@
         public int PagesAmount { get; set; }
         public string? ImageUrl { get; set; }
         public bool IsAvailable { get; set; }
-        public List<AuthorDto> Authors { get; set; }
+        public List<AuthorDto>? Authors { get; set; }
+        public List<int>? AuthorIds { get; set; }
     }
 }

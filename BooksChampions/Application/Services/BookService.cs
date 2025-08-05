@@ -7,8 +7,10 @@ namespace Application.Services
     public class BookService
     {
         private readonly IBookRepository _bookRepository;
-        public BookService(IBookRepository bookRepository) {
+        private readonly IAuthorRepository _authorRepository;
+        public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository) {
             _bookRepository = bookRepository;
+            _authorRepository = authorRepository;
         }
 
         public async Task<List<BookDto>> GetBooks() {
@@ -35,16 +37,25 @@ namespace Application.Services
                 .ToList();
         }
 
-        public Task<int> AddBook(BookDto bookDto)
+        public async Task<int> AddBook(BookDto bookDto)
         {
-            return _bookRepository.AddBook(new Book
+            var book = new Book
             {
                 Title = bookDto.Title,
                 Summary = bookDto.Summary,
                 Rating = bookDto.Rating,
                 PagesAmount = bookDto.PagesAmount,
-                ImageURL = bookDto.ImageUrl
-            });
+                ImageURL = bookDto.ImageUrl,
+                IsAvailable = bookDto.IsAvailable
+            };
+
+            if (bookDto.AuthorIds != null && bookDto.AuthorIds.Any())
+            {
+                var authors = await _authorRepository.GetAuthorsByIds(bookDto.AuthorIds);
+                book.Authors = authors;
+            }
+
+            return await _bookRepository.AddBook(book);
         }
 
         public void DeleteBook(int id)
