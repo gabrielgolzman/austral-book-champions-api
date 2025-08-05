@@ -17,5 +17,12 @@ namespace Infrastructure.Repository
         {
             return await _dbContext.Authors.ToListAsync();
         }
+
+        public async Task<List<Author>> GetAuthorsByIds(List<int> authorIds)
+        {
+            return await _dbContext.Authors
+                .Where(a => authorIds.Contains(a.Id))
+                .ToListAsync();
+        }
     }
 }

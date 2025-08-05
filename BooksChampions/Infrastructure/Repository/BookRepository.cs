@@ -22,8 +22,15 @@ namespace Infrastructure.Repository
 
         public async Task<int> AddBook(Book book)
         {
-            _dbContext.Books.Add(book);
+            if (book.Authors != null && book.Authors.Any())
+            {
+                foreach (var author in book.Authors)
+                {
+                    _dbContext.Entry(author).State = EntityState.Unchanged;
+                }
+            }
 
+            _dbContext.Books.Add(book);
             await _dbContext.SaveChangesAsync();
 
             return book.Id;
