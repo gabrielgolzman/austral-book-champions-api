@@ -13,7 +13,7 @@ namespace Application.Services
 
         public async Task<List<AuthorDto>> GetAuthors() {
             
-            var authors =  await _authorRepository.GetAuthors();
+            var authors = _authorRepository.Get();
 
             return authors
                 .Select(author => new AuthorDto

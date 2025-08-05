@@ -4,18 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
     {
-        private readonly BookDbContext _dbContext;
 
-        public AuthorRepository(BookDbContext dbContext)
+        public AuthorRepository(BookDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task<List<Author>> GetAuthors()
-        {
-            return await _dbContext.Authors.ToListAsync();
         }
 
         public async Task<List<Author>> GetAuthorsByIds(List<int> authorIds)
