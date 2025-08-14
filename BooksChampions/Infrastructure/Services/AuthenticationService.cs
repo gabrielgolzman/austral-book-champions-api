@@ -41,7 +41,7 @@ namespace Infrastructure.Services
                 return null;
             }
 
-            var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey));
+            var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey ?? ""));
 
             var credentials = new SigningCredentials(securityPassword, SecurityAlgorithms.HmacSha256);
 
@@ -78,6 +78,7 @@ namespace Infrastructure.Services
 
             var user = new User
             {
+                Username = rq.Username,
                 Email = rq.Email,
                 Password = hashedPassword
             };

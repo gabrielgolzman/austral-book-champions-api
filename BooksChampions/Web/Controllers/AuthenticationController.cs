@@ -35,7 +35,7 @@ namespace Web.Controllers
         public async Task<ActionResult<AuthResponse>> Register(RegisterRequest registerRequest)
         {
             // Check if the user is already authenticated (not sure if necessary, evaluate later)
-            if (User.Identity?.IsAuthenticated == true)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
                 return BadRequest(new AuthResponse { Success = false, Message = "User is already logged in" });
 
             var success = await _customAuthenticationService.Register(registerRequest);

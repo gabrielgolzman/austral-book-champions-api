@@ -80,7 +80,6 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 #region Services
 
 builder.Services.AddScoped<BookService>();
-builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorService>();
 builder.Services.Configure<AuthenticationsServiceOptions>(
    builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
