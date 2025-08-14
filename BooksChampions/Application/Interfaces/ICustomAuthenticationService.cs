@@ -4,6 +4,7 @@ namespace Application.Interfaces
 {
     public interface ICustomAuthenticationService
     {
-        string? Login(LoginRequest loginRequest);
+        Task<string?> Login(LoginRequest loginRequest);
+        Task<bool> Register(RegisterRequest registerRequest);
     }
 }

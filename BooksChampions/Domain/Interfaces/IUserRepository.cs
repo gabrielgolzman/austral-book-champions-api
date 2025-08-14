@@ -10,5 +10,7 @@ namespace Domain.Interfaces
     public interface IUserRepository
     {
         public Task<User?> GetUser(string email, string password);
+        public Task<User> CreateUser(User user);
+        public Task<User?> GetUserByEmail(string email);
     }
 }

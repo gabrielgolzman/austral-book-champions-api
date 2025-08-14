@@ -74,16 +74,14 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
-
 #endregion
 
 #region Services
 
 builder.Services.AddScoped<BookService>();
-builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorService>();
 builder.Services.Configure<AuthenticationsServiceOptions>(
-   builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
+builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
 builder.Services.AddScoped<ICustomAuthenticationService,AuthenticationService>();
 builder.Services.AddSingleton<PokemonAPIService>();
 #endregion
@@ -101,6 +99,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
