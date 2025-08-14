@@ -26,5 +26,19 @@ namespace Infrastructure.Repository
             return _dbContext.Set<T>().Find(new object[] {id});
         }
 
+        public void Add(T item)
+        {
+            _dbContext.Set<T>().Add(item);
+        }
+
+        public void Update(T item)
+        {
+            _dbContext.Set<T>().Update(item);
+        }
+
+        public void Delete(T item)
+        {
+            _dbContext.Set<T>().Remove(item);
+        }
     }
 }
