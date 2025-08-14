@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
 using Application.Models.Responses;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -12,9 +11,9 @@ namespace Web.Controllers
     {
         private readonly ICustomAuthenticationService _customAuthenticationService;
 
-        public AuthenticationController(ICustomAuthenticationService autenticacionService)
+        public AuthenticationController(ICustomAuthenticationService authenticationService)
         {
-            _customAuthenticationService = autenticacionService;
+            _customAuthenticationService = authenticationService;
         }
 
         [HttpPost("login")] 
