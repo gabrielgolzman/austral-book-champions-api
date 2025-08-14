@@ -23,12 +23,14 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Post(BookDto bookDto)
         {
             return Ok(_bookService.AddBook(bookDto));
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             _bookService.DeleteBook(id);
