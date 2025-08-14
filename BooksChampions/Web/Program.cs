@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen(setupAction =>
     {
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
-        Description = "Aquí poner el token generado al loguearse."
+        Description = "Aquï¿½ poner el token generado al loguearse."
     });
 
     setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -85,7 +85,7 @@ builder.Services.AddScoped<AuthorService>();
 builder.Services.Configure<AuthenticationsServiceOptions>(
    builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
 builder.Services.AddScoped<ICustomAuthenticationService,AuthenticationService>();
-
+builder.Services.AddSingleton<PokemonAPIService>();
 #endregion
 
 
