@@ -32,9 +32,9 @@ namespace Infrastructure.Services
 
         }
 
-        public string? Login(LoginRequest rq)
+        public async Task<string?> Login(LoginRequest rq)
         {
-            var user = ValidateUser(rq); 
+            var user = await ValidateUser(rq); 
 
             if (user == null)
             {
@@ -63,6 +63,27 @@ namespace Infrastructure.Services
                 .WriteToken(jwtSecurityToken);
 
             return tokenToReturn.ToString();
+        }
+
+        public async Task<bool> Register(RegisterRequest rq)
+        {
+            if (string.IsNullOrEmpty(rq.Email) || string.IsNullOrEmpty(rq.Password))
+                return false;
+
+            var existingUser = await _userRepository.GetUserByEmail(rq.Email);
+            if (existingUser != null)
+                return false;
+                
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(rq.Password);
+
+            var user = new User
+            {
+                Email = rq.Email,
+                Password = hashedPassword
+            };
+
+            await _userRepository.CreateUser(user);
+            return true;
         }
         public class AuthenticationsServiceOptions
         {
