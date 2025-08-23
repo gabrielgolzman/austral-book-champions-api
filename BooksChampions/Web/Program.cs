@@ -13,7 +13,14 @@ using static Infrastructure.Services.AuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddHttpClient(
+    "pokeHttpClient",
+    client =>
+    {
+        client.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+        client.Timeout = new TimeSpan(0,1,0);
+    })
+    .AddPolicyHandler(PollyResiliencePolicies.GetRetryPolicy());
 
 builder.Services.AddCors();
 

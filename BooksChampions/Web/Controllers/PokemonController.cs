@@ -15,9 +15,15 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult getBerry()
+        public async Task<IActionResult> getBerry()
         {
-            return Ok(_pokemonAPIService.GetBerry(1));
+            return Ok(await _pokemonAPIService.GetBerryAsync(1));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostBerry()
+        {
+            return Ok(await _pokemonAPIService.PostBerryAsync("code"));
         }
     }
 
