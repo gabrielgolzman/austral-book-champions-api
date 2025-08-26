@@ -8,19 +8,23 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Polly.Extensions.Http;
+using Polly;
 using System.Text;
 using static Infrastructure.Services.AuthenticationService;
+using Polly.CircuitBreaker;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddHttpClient(
     "pokeHttpClient",
     client =>
     {
         client.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
-        client.Timeout = new TimeSpan(0,1,0);
     })
-    .AddPolicyHandler(PollyResiliencePolicies.GetRetryPolicy());
+    .AddPolicyHandler(PollyResiliencePolicies.GetRetryPolicy())
+    .AddPolicyHandler(PollyResiliencePolicies.GetCircuitBreakerPolicy());
 
 builder.Services.AddCors();
 

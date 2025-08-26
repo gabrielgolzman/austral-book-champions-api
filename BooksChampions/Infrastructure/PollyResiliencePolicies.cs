@@ -14,9 +14,15 @@ namespace Infrastructure
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
-                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
-                                                                            retryAttempt)));
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                .WaitAndRetryAsync(2, retryAttempt =>new TimeSpan(0,0,4));
+        }
+
+        public static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .CircuitBreakerAsync(3, TimeSpan.FromMinutes(5));
         }
     }
 }
