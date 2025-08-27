@@ -4,10 +4,13 @@ using Domain.Interfaces;
 using Infrastructure;
 using Infrastructure.Repository;
 using Infrastructure.Services;
+using Infrastructure.Services.Auth0;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 using static Infrastructure.Services.AuthenticationService;
 
@@ -50,19 +53,26 @@ string connectionString = builder.Configuration["ConnectionStrings:BooksDBConnec
 var connection = new SqliteConnection(connectionString);
 connection.Open();
 
-
+var domain = $"https://{builder.Configuration["Auth0:Domain"]}/";
 builder.Services.AddAuthentication("Bearer") 
     .AddJwtBearer(options => 
     {
-        options.TokenValidationParameters = new()
+        //options.TokenValidationParameters = new()
+        //{
+        //    ValidateIssuer = true,
+        //    ValidateAudience = true,
+        //    ValidateIssuerSigningKey = true,
+        //    ValidIssuer = builder.Configuration["AuthenticationService:Issuer"],
+        //    ValidAudience = builder.Configuration["AuthenticationService:Audience"],
+        //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthenticationService:SecretForKey"] ?? ""))
+        //};
+
+        options.Authority = domain;
+        options.Audience = builder.Configuration["Auth0:Audience"];
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["AuthenticationService:Issuer"],
-            ValidAudience = builder.Configuration["AuthenticationService:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthenticationService:SecretForKey"] ?? ""))
-        };
+            NameClaimType = ClaimTypes.NameIdentifier
+        };    
     }
 );
 
@@ -85,7 +95,7 @@ builder.Services.AddScoped<AuthorService>();
 builder.Services.Configure<AuthenticationsServiceOptions>(
    builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
 builder.Services.AddScoped<ICustomAuthenticationService,AuthenticationService>();
-
+builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 #endregion
 
 
@@ -101,6 +111,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
