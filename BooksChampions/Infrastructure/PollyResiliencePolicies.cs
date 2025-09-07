@@ -10,19 +10,23 @@ namespace Infrastructure
 {
     public static class PollyResiliencePolicies
     {
-        public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(ApiClientConfiguration config)
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
                 .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                .WaitAndRetryAsync(2, retryAttempt =>new TimeSpan(0,0,4));
+                .WaitAndRetryAsync(
+                    config.RetryCount,
+                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) * config.RetryAttemptInSeconds)
+                );
         }
 
-        public static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        public static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy(ApiClientConfiguration config)
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .CircuitBreakerAsync(3, TimeSpan.FromMinutes(5));
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                .CircuitBreakerAsync(config.HandledEventsAllowedBeforeBreaking, TimeSpan.FromMinutes(config.DurationOfBreakInSeconds));
         }
     }
 }

@@ -16,6 +16,15 @@ using Polly.CircuitBreaker;
 
 var builder = WebApplication.CreateBuilder(args);
 
+# region HTPPCLientFactories
+
+ApiClientConfiguration pokeApiResilienceConfiguration = new()
+{
+    RetryCount = 2,
+    RetryAttemptInSeconds = 3,
+    DurationOfBreakInSeconds = 120,
+    HandledEventsAllowedBeforeBreaking = 10
+};
 
 builder.Services.AddHttpClient(
     "pokeHttpClient",
@@ -23,8 +32,10 @@ builder.Services.AddHttpClient(
     {
         client.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
     })
-    .AddPolicyHandler(PollyResiliencePolicies.GetRetryPolicy())
-    .AddPolicyHandler(PollyResiliencePolicies.GetCircuitBreakerPolicy());
+    .AddPolicyHandler(PollyResiliencePolicies.GetRetryPolicy(pokeApiResilienceConfiguration))
+    .AddPolicyHandler(PollyResiliencePolicies.GetCircuitBreakerPolicy(pokeApiResilienceConfiguration));
+
+#endregion
 
 builder.Services.AddCors();
 
