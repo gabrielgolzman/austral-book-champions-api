@@ -18,8 +18,20 @@ namespace Web.Controllers
 
         [HttpGet]
         public IActionResult Get() {
+            try
+            {
+                return Ok(_bookService.GetBooks());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message, stackTrace = ex.StackTrace });
+            }
+        }
 
-            return Ok(_bookService.GetBooks());
+        [HttpGet("health")]
+        public IActionResult Health()
+        {
+            return Ok(new { status = "API is running", timestamp = DateTime.UtcNow });
         }
 
         [HttpPost]
