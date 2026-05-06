@@ -35,6 +35,14 @@ builder.Services.AddHttpClient(
     .AddPolicyHandler(PollyResiliencePolicies.GetRetryPolicy(pokeApiResilienceConfiguration))
     .AddPolicyHandler(PollyResiliencePolicies.GetCircuitBreakerPolicy(pokeApiResilienceConfiguration));
 
+builder.Services.AddHttpClient(
+    "theOneApiHttpClient",
+    client =>
+    {
+        client.BaseAddress = new Uri("https://the-one-api.dev/v2/");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer lpEM4pSxoSZIfSabJxju");
+    });
+
 #endregion
 
 builder.Services.AddCors();
@@ -95,8 +103,6 @@ builder.Services.AddDbContext<BookDbContext>(dbContextOptions => dbContextOption
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-
-
 #endregion
 
 #region Services
@@ -105,9 +111,11 @@ builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorService>();
 builder.Services.Configure<AuthenticationsServiceOptions>(
-   builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
+builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
 builder.Services.AddScoped<ICustomAuthenticationService,AuthenticationService>();
+
 builder.Services.AddSingleton<PokemonAPIService>();
+builder.Services.AddScoped<TheOneAPIService>();
 #endregion
 
 
