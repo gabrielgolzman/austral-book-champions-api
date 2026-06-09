@@ -83,7 +83,7 @@ builder.Services.AddScoped<AuthorService>();
 builder.Services.Configure<AuthenticationsServiceOptions>(
 builder.Configuration.GetSection(AuthenticationsServiceOptions.AuthenticationService));
 builder.Services.AddScoped<ICustomAuthenticationService,AuthenticationService>();
-
+builder.Services.AddSingleton<PokemonAPIService>();
 #endregion
 
 
