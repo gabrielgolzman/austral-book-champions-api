@@ -24,10 +24,13 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore BooksChampions.sln
+        run: dotnet restore BooksChampions/BooksChampions.sln
 
       - name: Build with dotnet
-        run: dotnet build BooksChampions.sln --configuration Release
+        run: dotnet build BooksChampions/BooksChampions.sln --configuration Release
+
+      - name: Run tests
+        run: dotnet test BooksChampions/BooksChampions.sln --configuration Release --no-build
 
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"

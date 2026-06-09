@@ -58,9 +58,9 @@ namespace Application.Services
             return await _bookRepository.AddBook(book);
         }
 
-        public void DeleteBook(int id)
+        public async Task DeleteBook(int id)
         {
-             _bookRepository.DeleteBook(id);
+            await _bookRepository.DeleteBook(id);
         }
 
      

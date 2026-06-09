@@ -17,10 +17,10 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get() {
+        public async Task<IActionResult> Get() {
             try
             {
-                return Ok(_bookService.GetBooks());
+                return Ok(await _bookService.GetBooks());
             }
             catch (Exception ex)
             {
@@ -36,16 +36,16 @@ namespace Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Post(BookDto bookDto)
+        public async Task<IActionResult> Post(BookDto bookDto)
         {
-            return Ok(_bookService.AddBook(bookDto));
+            return Ok(await _bookService.AddBook(bookDto));
         }
 
         [HttpDelete("{id:int}")]
         [Authorize]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _bookService.DeleteBook(id);
+            await _bookService.DeleteBook(id);
             return Ok();
         }
 
