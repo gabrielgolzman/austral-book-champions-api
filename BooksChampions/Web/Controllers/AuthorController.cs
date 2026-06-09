@@ -14,9 +14,9 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get() {
+        public async Task<IActionResult> Get() {
 
-            return Ok(_authorService.GetAuthors());
+            return Ok(await _authorService.GetAuthors());
         }
 
     }

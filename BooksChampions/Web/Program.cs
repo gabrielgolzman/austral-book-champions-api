@@ -4,7 +4,6 @@ using Domain.Interfaces;
 using Infrastructure;
 using Infrastructure.Repository;
 using Infrastructure.Services;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -44,13 +43,6 @@ builder.Services.AddSwaggerGen(setupAction =>
 
 });
 
-string connectionString = builder.Configuration["ConnectionStrings:BooksDBConnectionString"]!;
-
-// Configure the SQLite connection
-var connection = new SqliteConnection(connectionString);
-connection.Open();
-
-
 builder.Services.AddAuthentication("Bearer") 
     .AddJwtBearer(options => 
     {
@@ -66,7 +58,8 @@ builder.Services.AddAuthentication("Bearer")
     }
 );
 
-builder.Services.AddDbContext<BookDbContext>(dbContextOptions => dbContextOptions.UseSqlite(connection));
+builder.Services.AddDbContext<BookDbContext>(dbContextOptions =>
+    dbContextOptions.UseSqlite(builder.Configuration.GetConnectionString("BooksDBConnectionString")));
 
 #region Repositories
 
@@ -118,3 +111,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
